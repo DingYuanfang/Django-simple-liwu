@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES常量中注释掉`'django.middleware.csrf.CsrfViewMiddleware'
 访问主页http://127.0.0.1:8000/liwu/ac
 
 注：
-如果你需要改变主页http://127.0.0.1:8000地址，还需要修改一行代码。
+如果你需要改变主页 http://127.0.0.1:8000  还需要修改一行代码。
 
 在`liwu/templates/liwu/base.html`文件中
 找到`var Absolute_PAth = "http://127.0.0.1:8000/liwu/acc"` 这行js代码
