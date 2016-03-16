@@ -1,0 +1,88 @@
+{% extends "liwu/base.html" %}
+
+
+
+{% block reg-login %}
+        {% if session_email == 1%}
+            <li class="dropdown" id="dashboard">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  {{ user.name }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="../user/{{ user.id }}">个人面板</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a id="logout" href="javascript:void(0)">注销</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li><a href="/liwu/reg_login">注册/登录</a></li>
+        {% endif%}
+
+{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="../../../static/liwu/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../../static/liwu/css/base.css"/>
+    <style>
+    .room-name{
+        margin-bottom: 10px;
+}
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <div id="content">
+    <h1>{{ accommodation.name }}</h1>
+    <span>发布者：{{ accommodation.publish_username }}</span>
+     <div class="accommodation-list">
+             <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>房名</th>
+                  <th>独立卫浴</th>
+                  <th>房间类型</th>
+                  <th>周价</th>
+                   <th>定金</th>
+                <th>入住时间</th>
+                    <th>搬出时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                 {% for room in accommodation.room_set.all %}
+                    <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ room.name }}</td>
+                        <td>
+                            {% if room.bathroom == 1 %}
+                                是
+                            {% else %}
+                                否
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if room.source_type == "whole" %}整套{% endif %}
+                            {% if room.source_type == "single" %}单间{% endif %}
+                            {% if room.source_type == "share" %}合住{% endif %}
+                        </td>
+                        <td>{{ room.week_price }}</td>
+                    <td>{{ room.order_price }}</td>
+                    <td>{{ room.start_data }}</td>
+                    <td>{{ room.end_data }}</td>
+{#                    <td>{{ accommodation.week_price }}</td>#}
+
+                    </tr>
+
+                {% endfor %}
+
+
+              </tbody>
+            </table>
+        </div> <!--accommodation-list end-->
+    </div>
+{% block scripts %}
+    <script src="../../../static/liwu/js/jquery-2.2.1.min.js"></script>
+    <script src="../../../static/liwu/js/bootstrap.min.js"></script>
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+aside{
+    text-align: center;
+}
+#accommodation-type{
+    font-size: 15px;
+    padding: 10px;
+    float: right;
+}
+.accommodation-list{
+
+    margin-left: 50px;
+    background: #fff;
+
+    border: 1px solid #f0f2e8;
+
+}
+td{
+    width: 200px;
+}
+
+.pagination{
+    display: block;
+    float: right;
+    margin: 0;
+   padding: 0 30px;
+}
+.input-page{
+    padding: 3px 10px !important;
+}
+.input-page input{
+    width: 50px;
+}
+#left form span {
+    margin-right: 20px;
+
+}
+#left div span input{
+    margin: 10px;
+
+}
+.sel-margin{
+    margin-left:25px;
+}

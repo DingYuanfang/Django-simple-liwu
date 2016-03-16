@@ -1,0 +1,105 @@
+{% extends "liwu/base.html" %}
+{% block head %}
+    <link type="text/css" rel="stylesheet" href="../../static/liwu/css/index.css"/>
+{% endblock %}
+
+{% block reg-login %}
+        {% if session_email == 1%}
+            <li class="dropdown" id="dashboard">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  {{ user.name }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="user/{{ user.id }}">个人面板</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a id="logout" href="javascript:void(0)">注销</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li><a href="/liwu/reg_login">注册/登录</a></li>
+        {% endif%}
+
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <aside id="left">
+           <div id = "accommodation-type">
+               <span id="type_label">房源类型</span>
+               <input name="accommodation" type="checkbox" value="SH" /> <span>独栋</span>
+               <span class="sel-margin"></span>
+               <input name="accommodation" type="checkbox" value="TP" /><span>学生公寓</span>
+               <span class="sel-margin"></span>
+               <input name="accommodation" type="checkbox" value="AP" /><span>公寓</span>
+               <span class="sel-margin"></span>
+               <button class="btn btn-default" id="search-btn">搜索</button>
+            </div>
+
+        </aside>
+        <div class="accommodation-list">
+             <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>公寓名</th>
+                  <th>地址</th>
+                  <th>房源</th>
+                    <th>发布者</th>
+                    <th>周价</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for accommodation in accommodation_list %}
+                    <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a href="acc/{{ accommodation.id }}">{{ accommodation.name }}</a></td>
+                        <td>{{ accommodation.address }}</td>
+                        <td>
+                            {% if accommodation.source_type == "TP" %}学生公寓{% endif %}
+                            {% if accommodation.source_type == "SH" %}独栋{% endif %}
+                            {% if accommodation.source_type == "AP" %}公寓{% endif %}
+                        </td>
+                        <td><a href="../liwu/user/{{ accommodation.user_publish_id }}">{{ accommodation.publish_username}}</a></td>
+{#                    <td>{{ accommodation.week_price }}</td>#}
+                        <td>100</td>
+
+                    </tr>
+
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+        {% if current_page != 0 %}
+          <nav>
+                <ul class="pagination">
+                    {% if page_state == "1_0" or page_state == "1_1" %}
+                    <li><a>...</a></li>
+                    {% endif %}
+                    {% for page in ran_page %}
+                        {% if page == current_page %}
+                            <li ><a class="current-page" href="?acc_filter={{ acc_filter_str }}&page={{ page }}&city={{ city_num }}">{{ page }}</a></li>
+                        {% else %}
+                            <li><a href="?acc_filter={{ acc_filter_str }}&page={{ page }}&city={{ city_num }}">{{ page }}</a></li>
+                        {% endif %}
+
+                    {% endfor %}
+                    {% if page_state == "1_1" or page_state == "0_1" %}
+                    <li><a>...</a></li>
+                    {% endif %}
+
+                    <li><a class="input-page"><input></a></li>
+                    <li><a id="goto" href="javascript:void(0)">转到</a></li>
+            </ul>
+          </nav>
+    {% endif%}
+
+        </div> <!--accommodation-list end-->
+
+
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script src="../../static/liwu/js/index.js" charset="utf-8"></script>
+{% endblock %}

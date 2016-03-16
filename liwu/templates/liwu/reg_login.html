@@ -1,0 +1,157 @@
+<head>
+    <link rel="stylesheet" href="../../static/liwu/css/bootstrap.min.css">
+</head>
+<style>
+body {
+  background: #eee !important;
+}
+
+.wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form-signin {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 30px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 20px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+
+}
+.checkbox{
+    margin-left:22px;
+}
+
+</style>
+
+<div class="wrapper">
+    <div class="form-signin">
+      <h4 class="form-signin-heading">注册/登录</h4>
+      <input type="text" id="email" class="form-control" name="username" placeholder="Email Address" required="" autofocus="">
+      <input type="password" class="form-control" id="pw" name="password" placeholder="Password" required="">
+{#      <label class="checkbox">#}
+{#        <input type="checkbox" value="remember-me" id="rememberMe" name="rememberMe"> Remember me#}
+{#      </label>#}
+        <h5 id="tip"></h5>
+      <button id="reg-btn" class="btn btn-lg btn-primary btn-block" >注册</button>
+       <button id="login-btn" class="btn btn-lg btn-success btn-block" >登录</button>
+    </div>
+
+  </div>
+
+<script src="../../../static/liwu/js/jquery-2.2.1.min.js"></script>
+<script src="../../../static/liwu/js/bootstrap.min.js"></script>
+<script>
+
+function checkEmail(str)
+{
+    var Regex = /^(?:\w+\.?)*\w+@(?:\w+\.)*\w+$/;
+    if (Regex.test(str)){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+$('#reg-btn').click(function () {
+
+    var email = $('#email').val();
+    var pw = $('#pw').val();
+
+    if(pw == ""){
+        $('#tip').html("密码为空")
+        return
+    }
+    if(!checkEmail(email)){
+        $('#tip').html("email格式错误")
+        return
+    }
+    $.ajax({
+       type: "POST",
+       url: "register_json",
+       data: {"email":email,"pw":pw },
+       dataType:"json",
+       success: function(data){
+         console.log(data);
+         if (data['msg'] == "y"){
+            $('#tip').html("恭喜,注册成功,可以登录了!");
+         }
+           if (data['msg'] == 'have_email'){
+               $('#tip').html("该邮箱已经存在！")
+
+           }
+       },
+        error: function () {
+            $('#tip').html("sorry,注册失败")
+        }
+    });
+
+});
+
+$('#login-btn').click(function(){
+    console.log(111)
+    var email = $('#email').val();
+    var pw = $('#pw').val();
+
+    if(pw == ""){
+        $('#tip').html("密码为空")
+        return
+    }
+    if(!checkEmail(email)){
+        //$('#tip').html("email格式错误")
+        //return
+    }
+
+    $.ajax({
+       type: "POST",
+       url: "login_json",
+       data: {"email":email,"pw":pw },
+       dataType:"json",
+       success: function(data){
+         console.log(data);
+         if (data['msg'] == "y"){
+            $('#tip').html("登录成功");
+             $('#tip').append("<a href='/liwu/acc'>回到主页</a>")
+
+         }
+           if (data['msg'] == 'n'){
+               $('#tip').html("登录失败,密码错误");
+
+           }
+       },
+        error: function () {
+            $('#tip').html("请求错误")
+        }
+    });
+});
+</script>

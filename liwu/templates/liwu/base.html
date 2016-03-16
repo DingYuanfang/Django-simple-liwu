@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../../static/liwu/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../static/liwu/css/base.css"/>
+{#<script type="text/javascript" language="javascript" src = "../../static/liwu/js/basic_fun.js" charset="utf-8"></script>#}
+
+    <title>Liwu</title>
+    {% block head %}
+
+    {% endblock %}
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-default" >
+        <div class="container-fluid" id="navbar">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header" >
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" id ="brand" href="#">Livety</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+
+      </ul>
+      <div  class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input id="city-input" type="text" class="form-control" placeholder="Search">
+        </div>
+        <button  id="city-btn" type="submit" class="btn  btn-default">搜索</button>
+          <span id="city-tip"></span>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+          {% block reg-login %}
+
+          {% endblock %}
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+    </nav>
+</header>
+{% block content %}
+
+{% endblock %}
+</body>
+<script src="../../static/liwu/js/jquery-2.2.1.min.js"></script>
+<script src="../../static/liwu/js/bootstrap.min.js"></script>
+
+<script>
+
+    //var Absolute_Path = "http://dingdemo.com:2016/liwu/acc"
+    var Absolute_Path = "http://127.0.0.1:8000/liwu/acc"
+function put_arg(dict){
+    index = 1;
+    str = "";
+    for (var key in dict) {
+        str += key+"="+dict[key]+"&";
+    }
+    ret_str = "?"+str.substr(0,str.length-1)
+    return ret_str
+}
+
+//得到url get方法参数
+function get_arg(){
+   //url = window.location.href
+   var url = location.search; //获取url中"?"符后的字串
+   var theRequest = new Object();
+   if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for(var i = 0; i < strs.length; i ++) {
+         theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+      }
+   }
+   return theRequest;
+}
+
+
+CITY_DICT = {'伯明翰':0,'格拉斯哥':1,'贝尔法斯特':2,'伦敦':3,'曼彻斯特':4,
+    '利兹':5,'利物浦':6,'卡迪夫':7,'爱丁堡':8,'布里斯托':9};
+
+$('#logout').click(function(){
+        $.ajax({
+            type:"POST",
+            url:"/liwu/logout",
+            dataType:"json",
+            success:function(data){
+                    if (data['msg'] == 'y'){
+                        window.location.href = Absolute_Path;
+                    }
+
+            }
+        })
+})
+
+$('#brand').click(function(){
+    console.log(111)
+    window.location.href = Absolute_Path
+})
+
+
+var args = get_arg();
+acc_filter = args['acc_filter'];
+page = args['page'];
+
+$('#city-btn').click(function(){
+    city = $('#city-input').val();
+    if (city.length<0){
+        return
+    }
+    if (CITY_DICT[city] != undefined)
+        city = CITY_DICT[city]
+    else{
+        $('#city-tip').html("暂时没有找到您要的结果，请尝试其他搜索.")
+        return
+    }
+
+    if (isNaN(page))
+        page = 1;
+    if (acc_filter == undefined)
+        acc_filter = "";
+
+    url_dict = new Array();
+    url_dict['page'] = page;
+    url_dict['acc_filter'] = acc_filter;
+    url_dict['city'] = city;
+    url = put_arg(url_dict)
+
+    //window.location.href ="http://127.0.0.1:8000/liwu/acc"+url;
+    window.location.href =Absolute_Path+url;
+    console.log(url)
+});
+
+
+</script>
+{% block scripts %}
+
+{% endblock %}
+</html>

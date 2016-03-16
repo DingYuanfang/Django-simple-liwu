@@ -1,0 +1,144 @@
+{% extends "liwu/base.html" %}
+{% block head %}
+    <link type="text/css" rel="stylesheet" href="../../static/liwu/css/index.css"/>
+        <style>
+        #content ul{
+            margin: 10px;
+
+        }
+       #content  li{
+            height: 40px;
+        }
+    </style>
+{% endblock %}
+{% block style %}
+
+
+{% endblock %}
+
+{% block reg-login %}
+        {% if session_email == 1 %}
+            <li class="dropdown" id="dashboard">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  {{ user.name }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/liwu/user/{{ user.id }}">个人面板</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a id="logout" href="javascript:void(0)">注销</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li><a href="/liwu/reg_login">注册/登录</a></li>
+        {% endif%}
+
+{% endblock %}
+{% block content %}
+    <div id="content">
+
+    {% if yourself == 1 %}
+        <ul>
+            <li>
+                <span>我的邮箱---</span>
+                <span id="email">{{ user.email }}</span>
+            </li>
+        <li>
+            <span>我的签名---</span>
+
+        </li>
+            <textarea id="text">{{ user.sign }}
+                </textarea>
+            <button id="edit-user">修改保存</button>
+            <h4 id="tip"></h4>
+        <li>
+            <span>我的发布:</span>
+        </li>
+        </ul>
+    {% else %}
+            <ul>
+                <h4>关于 {{ visit.name }}</h4>
+                <li>
+
+                    <span></span>
+                    <span>签名：</span>
+                    <span>{{ visit.sign }}</span>
+                </li>
+                <li>
+                    <span>发布:</span>
+                </li>
+            </ul>
+    {% endif  %}
+
+        {% if publish_count == 0 %}
+                <ul>无</ul>
+
+        {% else %}
+            <div class="accommodation-list">
+             <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>公寓名</th>
+                  <th>地址</th>
+                  <th>房源</th>
+                  <th>周价</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for accommodation in visit.accommodation_set.all %}
+                    <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                        <td>
+                            <a href="../acc/{{ accommodation.id }}">{{ accommodation.name }}</a></td>
+                        <td>{{ accommodation.address }}</td>
+                        <td>
+                            {% if accommodation.source_type == "TP" %}学生公寓{% endif %}
+                            {% if accommodation.source_type == "SH" %}独栋{% endif %}
+                            {% if accommodation.source_type == "AP" %}公寓{% endif %}
+                        </td>
+{#                    <td>{{ accommodation.week_price }}</td>#}
+                        <td>100</td>
+
+                    </tr>
+
+                {% endfor %}
+
+
+              </tbody>
+            </table>
+
+    </div> <!--accommodation-list end-->
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="../../static/liwu/js/index.js"></script>
+    <script>
+
+    $('#edit-user').click(function(){
+        email = $('#email').html()
+        text = $('#text').val()
+        $.ajax({
+            type : "POST",
+            url : "user_edit_json",
+            data:{"email":email,"sign":text},
+            dataType:'json',
+            success:function(data){
+                if(data['msg'] == 'y'){
+                    $('#tip').html("修改成功")
+                }
+                else{
+                    $('#tip').html("修改失败")
+                }
+            },
+            error: function () {
+                    $('#tip').html("修改失败")
+            }
+
+        })
+    })
+    </script>
+{% endblock %}
