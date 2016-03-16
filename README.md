@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES常量中注释掉`'django.middleware.csrf.CsrfViewMiddleware'
 访问主页http://127.0.0.1:8000/liwu/ac
 
 注：
-1.  如果你需要改变主页http://127.0.0.1:8000地址，还需要修改一行代码。
+如果你需要改变主页http://127.0.0.1:8000地址，还需要修改一行代码。
 
 在`liwu/templates/liwu/base.html`文件中
 找到`var Absolute_PAth = "http://127.0.0.1:8000/liwu/acc"` 这行js代码
@@ -59,7 +59,7 @@ MIDDLEWARE_CLASSES常量中注释掉`'django.middleware.csrf.CsrfViewMiddleware'
     var Absolute_Path = "http://dingdemo.com:2016/liwu/acc"
 
 
-2.  数据库使用默认sqlite3，测试配置mysql成功，其他未测试
+数据库使用默认sqlite3，测试配置mysql成功，其他未测试
 
 参考：[Django1.8 Doc][3]
 
