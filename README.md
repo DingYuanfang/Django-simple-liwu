@@ -59,7 +59,7 @@ MIDDLEWARE_CLASSES常量中注释掉`'django.middleware.csrf.CsrfViewMiddleware'
     var Absolute_Path = "http://dingdemo.com:2016/liwu/acc"
 
 
-2. 数据库使用默认sqlite3，测试配置mysql成功，其他未测试
+2.  数据库使用默认sqlite3，测试配置mysql成功，其他未测试
 
 参考：[Django1.8 Doc][3]
 
